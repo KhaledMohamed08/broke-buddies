@@ -25,4 +25,9 @@ class Shop extends Model
     {
         return $this->belongsTo(ShopCategory::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
