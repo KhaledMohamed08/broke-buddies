@@ -15,4 +15,14 @@ class Shop extends Model
         'name',
         'phone',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(ShopItem::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(ShopCategory::class);
+    }
 }

@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\ShopCategory;
+use App\Models\Shop;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Shop>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ItemCategory>
  */
-class ShopFactory extends Factory
+class ItemCategoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,8 +19,7 @@ class ShopFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'phone' => fake()->phoneNumber(),
-            'shop_category_id' => ShopCategory::inRandomOrder()->first()->id,
+            'shop_id' => Shop::inRandomOrder()->first()->id,
         ];
     }
 }

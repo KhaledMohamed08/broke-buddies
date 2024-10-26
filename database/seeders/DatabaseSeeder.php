@@ -14,8 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
-
         User::create([
             'name' => 'Khaled',
             'phone' => '01093833112',
@@ -23,9 +21,14 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('1234567890')
         ]);
 
+        User::factory(10)->create();
+
         $this->call([
+            ShopCategorySeeder::class,
             ShopSeeder::class,
+            ItemCategorySeeder::class,
             ShopItemSeeder::class,
+            ItemDetailsSeeder::class,
         ]);
     }
 }

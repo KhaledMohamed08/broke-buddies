@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\ShopCategory;
+use App\Models\ShopItem;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,11 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shops', function (Blueprint $table) {
+        Schema::create('item_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('phone');
-            $table->foreignIdFor(ShopCategory::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(ShopItem::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->enum('size', ['s', 'm', 'l'])->nullable();
+            $table->decimal('price', 8, 2);
+            $table->longText('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shops');
+        Schema::dropIfExists('item_details');
     }
 };

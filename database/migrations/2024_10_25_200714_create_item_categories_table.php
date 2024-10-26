@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Category;
-use App\Models\ItemCategory;
 use App\Models\Shop;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,20 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shop_items', function (Blueprint $table) {
+        Schema::create('item_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(ItemCategory::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
             $table->softDeletes();
-
-            // Composite foreign key constraint
-            $table->foreign(['shop_id', 'item_category_id'])
-            ->references(['shop_id', 'id'])
-            ->on('item_categories')
-            ->cascadeOnDelete()
-            ->cascadeOnUpdate();
         });
     }
 
@@ -36,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shop_items');
+        Schema::dropIfExists('item_categories');
     }
 };

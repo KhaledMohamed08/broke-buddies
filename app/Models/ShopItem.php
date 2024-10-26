@@ -11,10 +11,23 @@ class ShopItem extends Model
     /** @use HasFactory<\Database\Factories\ShopItemFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fiilable = [
+    protected $fillable = [
         'shop_id',
         'name',
-        'price',
-        'has_sizes',
     ];
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(ItemCategory::class);
+    }
+
+    public function detalis()
+    {
+        return $this->hasMany(ItemDetails::class);
+    }
 }
