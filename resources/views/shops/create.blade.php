@@ -31,9 +31,7 @@
                             <select id="shop_category" name="shop_category_id" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 <option value="" disabled selected>{{ __('Select a category') }}</option>
                                 @foreach ($shopCategories as $category)
-                                    <option value="{{ $category->id }}">
-                                        {{ $category->name }}
-                                    </option>
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -50,9 +48,7 @@
                             </div>
                         </div>
 
-                        <div class="text-lg font-semibold pt-6 mb-2">
-                            {{ __('Shop Menu') }}
-                        </div>
+                        <div class="text-lg font-semibold pt-6 mb-2">{{ __('Shop Menu') }}</div>
 
                         <div x-data="{ categories: [] }">
                             <template x-for="(category, categoryIndex) in categories" :key="categoryIndex">
@@ -61,54 +57,70 @@
                                         <div class="flex justify-between items-center">
                                             <span class="text-lg font-semibold text-gray-800" x-text="category.name"></span>
                                             <x-danger-button type="button" @click="categories.splice(categoryIndex, 1)">
-                                                {{ __('-') }}
+                                                {{ __('Remove This Category') }}
                                             </x-danger-button>
                                         </div>
                                         <div class="mt-4">
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div>
-                                                    <label class="block text-sm font-medium text-gray-700">Item Name</label>
-                                                    <input type="text" x-model="category.itemName" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter item name" required>
+                                            <template x-for="(item, itemIndex) in category.items" :key="itemIndex">
+                                                <div class="mt-4">
+                                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label class="block text-sm font-medium text-gray-700">Item Name</label>
+                                                            <input type="text" x-model="item.name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter item name" required>
 
-                                                    <div class="mt-4">
-                                                        <template x-for="(item, itemIndex) in category.items" :key="itemIndex">
-                                                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                                                                <div>
-                                                                    <label class="block text-sm font-medium text-gray-700">Size</label>
-                                                                    <select x-model="item.size" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                                                        <option value="" disabled selected>{{ __('Select Size') }}</option>
-                                                                        <option value="S">S</option>
-                                                                        <option value="M">M</option>
-                                                                        <option value="L">L</option>
-                                                                        <option value="No Size">{{ __('No Size') }}</option>
-                                                                    </select>
-                                                                </div>
+                                                            <div class="mt-4">
+                                                                <template x-for="(sizeItem, sizeIndex) in item.sizes" :key="sizeIndex">
+                                                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                                                                        <div>
+                                                                            <label class="block text-sm font-medium text-gray-700">Size</label>
+                                                                            <select x-model="sizeItem.size" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                                                                <option value="" disabled selected>{{ __('Select Size') }}</option>
+                                                                                <option value="S">S</option>
+                                                                                <option value="M">M</option>
+                                                                                <option value="L">L</option>
+                                                                                <option value="No Size">{{ __('No Size') }}</option>
+                                                                            </select>
+                                                                        </div>
 
-                                                                <div>
-                                                                    <label class="block text-sm font-medium text-gray-700">Price</label>
-                                                                    <input type="number" min="1" x-model="item.price" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter price" required>
-                                                                </div>
+                                                                        <div>
+                                                                            <label class="block text-sm font-medium text-gray-700">Price</label>
+                                                                            <input type="number" min="1" x-model="sizeItem.price" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter price" required>
+                                                                        </div>
 
-                                                                <div class="flex items-end">
-                                                                    <x-danger-button class="m-1 p-1" type="button" @click="category.items.splice(itemIndex, 1)">
-                                                                        {{ __('-') }}
-                                                                    </x-danger-button>
+                                                                        <div class="flex items-end">
+                                                                            <x-danger-button class="m-1 p-1" type="button" @click="item.sizes.splice(sizeIndex, 1)">
+                                                                                {{ __('-') }}
+                                                                            </x-danger-button>
+                                                                        </div>
+                                                                    </div>
+                                                                </template>
+
+                                                                <div class="flex items-center justify-start mt-4">
+                                                                    <x-primary-button type="button" @click="item.sizes.push({ size: '', price: '' })">
+                                                                        {{ __('Add Size/Price') }}
+                                                                    </x-primary-button>
                                                                 </div>
                                                             </div>
-                                                        </template>
+                                                        </div>
 
-                                                        <div class="flex items-center justify-start mt-4">
-                                                            <x-primary-button type="button" @click="category.items.push({ size: '', price: '' })">
-                                                                {{ __('+') }}
-                                                            </x-primary-button>
+                                                        <div>
+                                                            <label class="block text-sm font-medium text-gray-700">Description</label>
+                                                            <textarea x-model="item.description" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter item description" required></textarea>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div>
-                                                    <label class="block text-sm font-medium text-gray-700">Description</label>
-                                                    <textarea x-model="category.description" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Enter item description" required></textarea>
+                                                    <div class="flex items-center justify-end mt-4">
+                                                        <x-danger-button class="m-1" type="button" @click="category.items.splice(itemIndex, 1)">
+                                                            {{ __('Remove Item') }}
+                                                        </x-danger-button>
+                                                    </div>
                                                 </div>
+                                            </template>
+
+                                            <div class="flex items-center justify-end mt-4">
+                                                <x-primary-button class="m-1" type="button" @click="category.items.push({ name: '', sizes: [{ size: '', price: '' }], description: '' })">
+                                                    {{ __('Add New Item') }}
+                                                </x-primary-button>
                                             </div>
                                         </div>
                                     </div>
@@ -130,7 +142,7 @@
                                             {{ __('Cancel') }}
                                         </x-secondary-button>
 
-                                        <x-primary-button type="button" @click="categories.push({ name: newCategoryName, description: '', itemName: '', items: [{ size: '', price: '' }] }); newCategoryName = ''; $dispatch('close')">
+                                        <x-primary-button type="button" @click="categories.push({ name: newCategoryName, items: [{ name: '', sizes: [{ size: '', price: '' }], description: '' }] }); newCategoryName = ''; $dispatch('close')">
                                             {{ __('Apply') }}
                                         </x-primary-button>
                                     </div>
