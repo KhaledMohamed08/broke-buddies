@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\DashBoardController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
@@ -9,9 +12,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashBoardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -19,11 +20,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // Shop Routes
     Route::prefix('shops')->name('shops.')->group(function () {
-        Route::resource('/', ShopController::class);
+        Route::resource('/', ShopController::class)->parameter('', 'shop');
     });
-    // Shop Routes
+    // Shop Items Routes
     Route::prefix('shop-items')->name('shop-items.')->group(function () {
-        Route::resource('/', ShopItemController::class);
+        Route::resource('/', ShopItemController::class)->parameter('', 'shop-items');
+    });
+    // Order Routes
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::resource('/', OrderController::class)->parameter('', 'order');
+    });
+    // Order Items Routes
+    Route::prefix('order-items')->name('order-items.')->group(function () {
+        Route::resource('/', OrderItemController::class)->parameter('', 'order-items');
     });
 });
 

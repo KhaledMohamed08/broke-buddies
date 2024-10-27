@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreShopRequest;
 use App\Http\Requests\UpdateShopRequest;
 use App\Models\Shop;
+use App\Services\ShopCategoryService;
 use App\Services\ShopService;
 
 class ShopController extends Controller
@@ -23,7 +24,11 @@ class ShopController extends Controller
      */
     public function create()
     {
-        //
+        $shopCategories = (new ShopCategoryService)->index();
+
+        return view('shops.create', compact([
+            'shopCategories',
+        ]));
     }
 
     /**
@@ -31,7 +36,9 @@ class ShopController extends Controller
      */
     public function store(StoreShopRequest $request)
     {
-        //
+        $data = $request->all();
+
+        return $data;
     }
 
     /**

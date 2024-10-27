@@ -16,6 +16,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->foreignIdFor(Shop::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->unsignedTinyInteger('status')->default(OrderStatusEnum::ACTIVE->value);

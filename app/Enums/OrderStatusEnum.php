@@ -11,8 +11,8 @@ enum OrderStatusEnum: int
     {
         return match($this)
         {
-            self::ACTIVE => 'active',
-            self::IN_ACTIVE => 'in_active',
+            self::ACTIVE => 'Active',
+            self::IN_ACTIVE => 'In Active',
         };
     }
 

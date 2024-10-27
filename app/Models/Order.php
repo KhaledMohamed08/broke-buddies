@@ -2,22 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Searchable;
 
     protected $fillable = [
+        'code',
         'shop_id',
         'user_id',
         'status',
         'ends_at',
         'notes',
     ];
+
+    // public function toSearchableArray()
+    // {
+    //     return [
+    //         'code' => $this->code,
+    //         // Add other fields you want to be searchable
+    //     ];
+    // }
 
     public function items()
     {
