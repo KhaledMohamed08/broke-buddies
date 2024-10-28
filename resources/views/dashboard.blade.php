@@ -214,21 +214,3 @@
         </div>
     </div>
 </x-app-layout>
-
-
-
-<div class="w-3/4 pr-4">
-    <h3 class="font-semibold text-lg mb-4">Shop Items</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="bg-gray-100 p-4 rounded-lg shadow">
-                <div class="font-bold">name</div>
-                {{-- drop down for sizes --}}
-                {{-- price --}}
-                <div class="mt-2">
-                    <x-primary-button>
-                        <a href="#">{{ __('add to cart') }}</a>
-                    </x-primary-button>
-                </div>
-            </div>
-    </div>
-</div>
