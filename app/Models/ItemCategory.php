@@ -20,4 +20,9 @@ class ItemCategory extends Model
     {
         return $this->belongsTo(Shop::class);
     }
+
+    public function items()
+    {
+        return $this->hasMany(ShopItem::class);
+    }
 }

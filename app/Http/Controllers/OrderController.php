@@ -85,6 +85,13 @@ class OrderController extends Controller
         ]));
     }
 
+    public function details(Order $order)
+    {
+        return view('orders.details', compact(
+            'order',
+        ));
+    }
+
     private function generateOrderCode()
     {
         do {

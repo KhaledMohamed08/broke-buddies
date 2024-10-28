@@ -21,9 +21,14 @@ class Shop extends Model
         return $this->hasMany(ShopItem::class);
     }
 
+    public function shopCategories()
+    {
+        return $this->hasMany(ItemCategory::class);
+    }
+
     public function category()
     {
-        return $this->belongsTo(ShopCategory::class);
+        return $this->belongsTo(ShopCategory::class, 'shop_category_id', 'id');
     }
 
     public function orders()

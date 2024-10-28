@@ -97,6 +97,9 @@
                                     </td>
                                     <td class="py-3 px-6 text-left">{{ $order->ends_at }}</td>
                                     <td class="py-3 px-6">
+                                        <x-primary-button class="mt-4 mr-2">
+                                            <a href="{{ route('orders.details', $order->id) }}">{{ __('Order Details') }}</a>
+                                        </x-primary-button>
                                         <x-primary-button x-data=""
                                             x-on:click.prevent="$dispatch('open-modal', 'edit-user-order{{ $order->id }}')">{{ __('Edit Order') }}</x-primary-button>
 
