@@ -14,13 +14,6 @@
                     <div class="text-lg font-semibold">
                         {{ __('Shop Name') }}
                     </div>
-                    <div>
-                        <input 
-                            type="text" 
-                            placeholder="Search items..." 
-                            class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500"
-                        />
-                    </div>
                 </div>
             </div>
         </div>
@@ -31,7 +24,18 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 flex">
                     <div class="w-3/4 pr-4">
-                        <h3 class="font-semibold text-lg mb-4">Shop Items</h3>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-semibold text-lg">Shop Items</h3>
+                            
+                            <div class="w-1/4">
+                                <input 
+                                    type="text" 
+                                    placeholder="Search items..." 
+                                    class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring focus:ring-blue-500"
+                                />
+                            </div>
+                        </div>
+                        
 
                         <div class="max-h-96 overflow-y-auto">
                             {{-- Category 1 --}}
