@@ -21,13 +21,13 @@ class Order extends Model
         'notes',
     ];
 
-    // public function toSearchableArray()
-    // {
-    //     return [
-    //         'code' => $this->code,
-    //         // Add other fields you want to be searchable
-    //     ];
-    // }
+    public function toSearchableArray()
+    {
+        return [
+            'code' => $this->code,
+            // Add other fields you want to be searchable
+        ];
+    }
 
     public function items()
     {

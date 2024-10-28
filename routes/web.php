@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     // Order Routes
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::resource('/', OrderController::class)->parameter('', 'order');
+        Route::get('/join/{order}', [OrderController::class, 'join'])->name('join');
     });
     // Order Items Routes
     Route::prefix('order-items')->name('order-items.')->group(function () {

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
 use App\Services\OrderService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -33,10 +34,7 @@ class OrderController extends Controller
     public function store(StoreOrderRequest $request)
     {
         $data = $request->validated();
-        do {
-            $code = rand(100000, 999999);
-        } while (Order::where('code', $code)->exists());
-        $data['code'] = $code;
+        $data['code'] = $this->generateOrderCode();
         $data['user_id'] = Auth::user()->id;
         $this->orderService->store($data);
 
@@ -78,5 +76,21 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         return $order;
+    }
+
+    public function join(Order $order)
+    {
+        return view('orders.join', compact([
+            'order',
+        ]));
+    }
+
+    private function generateOrderCode()
+    {
+        do {
+            $code = rand(100000, 999999);
+        } while (Order::where('code', $code)->exists());
+
+        return $code;
     }
 }
