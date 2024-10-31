@@ -34,9 +34,19 @@ class BaseService
         return $model;
     }
 
-    public function delete(Model $model)
+    public function destroy(Model $model)
     {
         $model->delete();
         return $model;
     }
+
+    public function search(string $query)
+    {
+        return $this->model->search($query)->get();
+    }
+
+    // public static function search(Model $model, string $query)
+    // {
+    //     return $model->search($query)->get();
+    // }
 }

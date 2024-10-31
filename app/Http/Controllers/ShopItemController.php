@@ -65,4 +65,9 @@ class ShopItemController extends Controller
     {
         //
     }
+
+    public function ajaxSearch($search)
+    {
+        return response()->json($this->shopItemService->search($search));
+    }
 }

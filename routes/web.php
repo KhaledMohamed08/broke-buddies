@@ -14,7 +14,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashBoardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group( function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -29,11 +29,9 @@ Route::middleware('auth')->group(function () {
     // Order Routes
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::resource('/', OrderController::class)->parameter('', 'order');
-        Route::get('/join/{order}', [OrderController::class, 'join'])->name('join');
-        Route::get('/details/{order}', [OrderController::class, 'details'])->name('details');
     });
     // Order Items Routes
-    Route::prefix('order-items')->name('order-items.')->group(function () {
+    Route::prefix('order-items/{order}')->name('order-items.')->group(function () {
         Route::resource('/', OrderItemController::class)->parameter('', 'order-items');
     });
 });

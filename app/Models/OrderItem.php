@@ -15,7 +15,8 @@ class OrderItem extends Model
         'order_id',
         'user_id',
         'shop_item_id',
-        'count',
+        'item_details_id',
+        'quantity',
     ];
 
     public function order()
@@ -30,6 +31,11 @@ class OrderItem extends Model
 
     public function item()
     {
-        return $this->belongsTo(ShopItem::class);
+        return $this->belongsTo(ShopItem::class, 'shop_item_id', 'id');
+    }
+
+    public function itemDetails()
+    {
+        return $this->belongsTo(ItemDetails::class);
     }
 }

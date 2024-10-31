@@ -26,7 +26,7 @@
                     </div>
                 </header>
             @endisset
-
+            <x-toast-notification></x-toast-notification>
             <!-- Page Content -->
             <main>
                 {{ $slot }}

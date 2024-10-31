@@ -53,8 +53,19 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function joinedOrders()
+    {
+        $orderIds = $this->orderItems()->pluck('order_id')->unique();
+        return Order::whereIn('id', $orderIds)->get();
+    }
+
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function orderItemsForOrderId($orderId)
+    {
+        return $this->orderItems()->where('order_id', $orderId)->get();
     }
 }

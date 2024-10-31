@@ -20,6 +20,6 @@ class ItemDetails extends Model
 
     public function item()
     {
-        return $this->belongsTo(ShopItem::class);
+        return $this->belongsTo(ShopItem::class, 'shop_item_id', 'id');
     }
 }

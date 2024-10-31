@@ -46,7 +46,9 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return view('orders.show', compact(
+            'order',
+        ));
     }
 
     /**
@@ -75,21 +77,14 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        return $order;
+        $this->orderService->destroy($order);
+
+        return redirect()->back()->with('success', 'Order Deleted Successfuly.');
     }
 
-    public function join(Order $order)
+    public function ajaxSearch($search)
     {
-        return view('orders.join', compact([
-            'order',
-        ]));
-    }
-
-    public function details(Order $order)
-    {
-        return view('orders.details', compact(
-            'order',
-        ));
+        return response()->json($this->orderService->search($search));
     }
 
     private function generateOrderCode()

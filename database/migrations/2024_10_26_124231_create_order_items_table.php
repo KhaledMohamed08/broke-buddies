@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ItemDetails;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\ShopItem;
@@ -19,7 +20,8 @@ return new class extends Migration
             $table->foreignIdFor(Order::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(ShopItem::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('count')->default(1);
+            $table->foreignIdFor(ItemDetails::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->integer('quantity')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
