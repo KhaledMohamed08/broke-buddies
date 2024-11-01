@@ -26,6 +26,9 @@ class StoreOrderRequest extends FormRequest
             'user_id' => '',
             'ends_at' => '',
             'notes' => '',
+            'fees' => '',
+            'fees.*.fee_name' => 'string|max:255',
+            'fees.*.fee_price' => 'numeric|min:0',
         ];
     }
 }

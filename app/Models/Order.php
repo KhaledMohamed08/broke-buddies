@@ -19,6 +19,7 @@ class Order extends Model
         'status',
         'ends_at',
         'notes',
+        'fees',
     ];
 
     public function toSearchableArray()
@@ -48,6 +49,11 @@ class Order extends Model
         return $this->items->load('user')->pluck('user')->unique('id')->values();
     }
 
+    public function fees()
+    {
+        return $this->hasMany(OrderFees::class);
+    }
+
     public function orderItemsDetails()
     {
         $items = $this->items()->with('itemDetails')->get();
@@ -65,6 +71,11 @@ class Order extends Model
 
     public function orderTotalPrice()
     {
+        return $this->orderItemsTotalPrice() + $this->OrderFeesTotalPrice();
+    }
+
+    public function orderItemsTotalPrice()
+    {
         $totlaPrice = 0;
         $items = $this->orderItemsDetails();
         foreach ($items as $item)
@@ -74,5 +85,15 @@ class Order extends Model
         }
         
         return $totlaPrice;
+    }
+
+    public function OrderFeesTotalPrice()
+    {
+        $totalPrice = 0;
+        foreach ($this->fees as $fee) {
+            $totalPrice += $fee->price;
+        }
+
+        return $totalPrice;
     }
 }

@@ -33,10 +33,7 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        $data = $request->validated();
-        $data['code'] = $this->generateOrderCode();
-        $data['user_id'] = Auth::user()->id;
-        $this->orderService->store($data);
+        $this->orderService->store($request->validated());
 
         return redirect()->back()->with('success', 'Order Created Successfully');
     }
@@ -85,14 +82,5 @@ class OrderController extends Controller
     public function ajaxSearch($search)
     {
         return response()->json($this->orderService->search($search));
-    }
-
-    private function generateOrderCode()
-    {
-        do {
-            $code = rand(100000, 999999);
-        } while (Order::where('code', $code)->exists());
-
-        return $code;
     }
 }

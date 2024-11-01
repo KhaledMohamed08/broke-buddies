@@ -25,6 +25,9 @@ class UpdateOrderRequest extends FormRequest
             'status' => '',
             'ends_at' => '',
             'notes' => '',
+            'fees' => 'array',
+            'fees.*.fee_name' => 'string|max:255',
+            'fees.*.fee_price' => 'numeric|min:0',
         ];
     }
 }

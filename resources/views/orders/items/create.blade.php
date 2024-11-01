@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div>
+        <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 flex">
@@ -142,14 +142,33 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3" class="py-3 px-6 text-right font-semibold">
-                                                            Total Price:</td>
-                                                        <td class="py-3 px-6 text-left"
-                                                            x-text="`$${totalPrice.toFixed(2)}`"></td>
+                                                            Sub Total Price:
+                                                        </td>
+                                                        <td class="py-3 px-6 text-left" x-text="`$${totalPrice.toFixed(2)}`"></td>
                                                     </tr>
+                                                    
+                                                    @foreach ($order->fees as $fee)
                                                     <tr>
                                                         <td colspan="3" class="py-3 px-6 text-right font-semibold">
-                                                            Deliver Price:</td>
-                                                        <td class="py-3 px-6 text-left">not selected yet</td>
+                                                            {{ $fee->name }}:
+                                                        </td>
+                                                        <td class="py-3 px-6 text-left">{{ number_format($fee->price / ($order->orderUsers()->count() + 1 ?: 1), 2) }} / decrease if others join.
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                
+                                                    <tr>
+                                                        <td colspan="3" class="py-3 px-6 text-right font-semibold">
+                                                            Total Price:
+                                                        </td>
+                                                        <td class="py-3 px-6 text-left" x-text="`$${(totalPrice + {{ $order->orderFeesTotalPrice() / ($order->orderUsers()->count() + 1 ?: 1) }}).toFixed(2)}`"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="py-1 px-6 text-right">
+                                                            <p class="text-sm text-gray-500 mt-1">
+                                                                <strong class="font-semibold text-black">Note:</strong> May be Order Admin Add or Update <strong class="font-semibold text-black">Extra Fees</strong> Before Order Submitted.
+                                                            </p>                                                            
+                                                        </td>
                                                     </tr>
                                                 </tfoot>
                                             </table>

@@ -229,13 +229,46 @@
                                     required>
                             </div>
 
-                            <!-- Notes Textarea -->
                             <div class="mb-4">
                                 <label for="notes"
                                     class="block text-sm font-medium text-gray-700">{{ __('Notes') }}</label>
                                 <textarea id="notes" name="notes" rows="4"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('notes', $order->notes) }}</textarea>
                             </div>
+
+                            <div x-data="{ fees: [] }" class="mb-4">
+                                <span class="block text-sm font-medium text-gray-700 mb-1">{{ __('Order Fees') }}</span>
+                            
+                                <template x-for="(fee, index) in fees" :key="index">
+                                    <div class="mb-4 flex items-end space-x-4">
+                                        <div class="flex-1">
+                                            <label :for="'fee_name_' + index" class="block text-sm font-medium text-gray-700">{{ __('Fees Name') }}</label>
+                                            <input type="text" :id="'fee_name_' + index" 
+                                                :name="'fees[' + index + '][name]'" 
+                                                x-model="fee.name"
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                                                required>
+                                        </div>
+                                        <div class="flex-1">
+                                            <label :for="'fee_price_' + index" class="block text-sm font-medium text-gray-700">{{ __('Fees Price') }}</label>
+                                            <input type="number" :id="'fee_price_' + index" 
+                                                :name="'fees[' + index + '][price]'" 
+                                                x-model="fee.price"
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                                                required>
+                                        </div>
+                                        <x-danger-button type="button" @click="fees.splice(index, 1)">
+                                            {{ __('x') }}
+                                        </x-danger-button>
+                                    </div>
+                                </template>
+                            
+                                <x-primary-button type="button" @click="fees.push({ name: '', price: '' })">
+                                    {{ __('Add Fees') }}
+                                </x-primary-button>
+                            </div>
+                            
+
                             <div class="mt-6 flex justify-end">
                                 <x-secondary-button x-on:click="$dispatch('close')">
                                     {{ __('Cancel') }}

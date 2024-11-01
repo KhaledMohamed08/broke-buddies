@@ -11,26 +11,50 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Order Code Section -->
             <div class="bg-white shadow-lg rounded-lg mb-6">
-                <div class="p-6 border-b border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">
-                        {{ __('Order Code: ' . $order->code) }}
-                    </h3>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">
-                        {{ __('Shop Name: ' . $order->shop->name) }}
-                    </h3>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">
-                        {{ __('Shop Phone: ' . $order->shop->phone) }}
-                    </h3>
-                    <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                <div class="p-6 border-b border-gray-200 flex flex-col md:flex-row md:justify-between md:items-start">
+                    <!-- Order Details -->
+                    <div class="mb-4 md:mb-0 md:w-1/3">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                            {{ __('Order Code: ' . $order->code) }}
+                        </h3>
                         <p class="font-semibold text-sm text-gray-600">
                             {{ __('Order Users Count: ' . $order->orderUsers()->count()) }}
                         </p>
-                        <p class="text-lg font-semibold text-gray-800 mt-2 md:mt-0">
+                    </div>
+
+                    <!-- Shop Details -->
+                    <div class="mb-4 md:mb-0 md:w-1/3">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                            {{ __('Shop Name: ' . $order->shop->name) }}
+                        </h3>
+                        <p class="font-semibold text-sm text-gray-600">
+                            {{ __('Shop Phone: ' . $order->shop->phone) }}
+                        </p>
+                    </div>
+
+                    <!-- Price Details -->
+                    <div class="md:w-1/3">
+                        <p class="text-lg font-semibold text-gray-800 mb-2">
+                            {{ __('Order Sub Total Price: $' . $order->orderItemsTotalPrice()) }}
+                        </p>
+                        <p class="text-lg font-semibold text-gray-800 mb-2">
+                            {{ __('Order Fees: $' .  $order->orderFeesTotalPrice() ) }}
+                            <span class="ml-2 text-sm text-gray-600">
+                                @foreach ($order->fees as $fee)
+                                    <span>{{ $fee->name }}: ${{ $fee->price }}</span>
+                                    @if (!$loop->last)
+                                        ,
+                                    @endif
+                                @endforeach
+                            </span>
+                        </p>
+                        <p class="text-lg font-semibold text-gray-800 mb-2">
                             {{ __('Order Total Price: $' . $order->orderTotalPrice()) }}
                         </p>
                     </div>
                 </div>
             </div>
+
 
             <!-- Action Buttons Section -->
             <div class="mb-6">
@@ -67,13 +91,45 @@
                                     required>
                             </div>
 
-                            <!-- Notes Textarea -->
                             <div class="mb-4">
                                 <label for="notes"
                                     class="block text-sm font-medium text-gray-700">{{ __('Notes') }}</label>
                                 <textarea id="notes" name="notes" rows="4"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('notes', $order->notes) }}</textarea>
                             </div>
+                            
+                            <div x-data="{ fees: [] }" class="mb-4">
+                                <span
+                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Order Fees') }}</span>
+
+                                <template x-for="(fee, index) in fees" :key="index">
+                                    <div class="mb-4 flex items-end space-x-4">
+                                        <div class="flex-1">
+                                            <label :for="'fee_name_' + index"
+                                                class="block text-sm font-medium text-gray-700">{{ __('Fees Name') }}</label>
+                                            <input type="text" :id="'fee_name_' + index"
+                                                :name="'fees[' + index + '][name]'" x-model="fee.name"
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                                required>
+                                        </div>
+                                        <div class="flex-1">
+                                            <label :for="'fee_price_' + index"
+                                                class="block text-sm font-medium text-gray-700">{{ __('Fees Price') }}</label>
+                                            <input type="number" :id="'fee_price_' + index"
+                                                :name="'fees[' + index + '][price]'" x-model="fee.price"
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                                required>
+                                        </div>
+                                        <x-danger-button type="button" @click="fees.splice(index, 1)">
+                                            {{ __('x') }}
+                                        </x-danger-button>
+                                    </div>
+                                </template>
+
+                                <x-primary-button type="button" @click="fees.push({ name: '', price: '' })">
+                                    {{ __('Add Fees') }}
+                                </x-primary-button>
+                            </div>
 
                             <div class="mt-6 flex justify-end">
                                 <x-secondary-button x-on:click="$dispatch('close')">
@@ -86,24 +142,7 @@
                             </div>
                         </form>
                     </x-modal>
-                    <x-primary-button x-data=""
-                        x-on:click.prevent="$dispatch('open-modal', 'add-fees-user-order{{ $order->id }}')">{{ __('Add Fees To Order') }}</x-primary-button>
 
-                    <x-modal name="add-fees-user-order{{ $order->id }}" focusable>
-                        <form method="POST" action="#" class="p-6">
-                            @csrf
-
-                            <div class="mt-6 flex justify-end">
-                                <x-secondary-button x-on:click="$dispatch('close')">
-                                    {{ __('Cancel') }}
-                                </x-secondary-button>
-
-                                <x-primary-button class="ms-3">
-                                    {{ __('Apply') }}
-                                </x-primary-button>
-                            </div>
-                        </form>
-                    </x-modal>
                     <x-danger-button class="ml-2" x-data=""
                         x-on:click.prevent="$dispatch('open-modal', 'delete-user-order{{ $order->id }}')">{{ __('Delete Order') }}</x-danger-button>
                     <x-modal name="delete-user-order{{ $order->id }}" focusable>
