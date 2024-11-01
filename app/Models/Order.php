@@ -62,4 +62,17 @@ class Order extends Model
 
         return $itemsDetails;
     }
+
+    public function orderTotalPrice()
+    {
+        $totlaPrice = 0;
+        $items = $this->orderItemsDetails();
+        foreach ($items as $item)
+        {
+            $price = $item['item_details']['price'] * $item['quantity'];
+            $totlaPrice += $price;
+        }
+        
+        return $totlaPrice;
+    }
 }

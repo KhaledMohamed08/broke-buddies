@@ -105,88 +105,79 @@
                                 <span class="font-bold text-lg" x-text="`$${totalPrice.toFixed(2)}`"></span>
                                 <div class="ml-auto">
                                     <x-primary-button class="ml-2" x-data=""
-                                        x-on:click.prevent="$dispatch('open-modal', 'add-order-items')">{{ __('Update Your Order') }}</x-primary-button>
-                                    <x-modal name="add-order-items" focusable>
-                                        <form method="POST"
-                                            action="{{ route('order-items.update', [$order->id, 'items']) }}"
-                                            class="p-6" x-data="{ extraFees: 0 }">
-                                            @csrf
-                                            @method('PUT')
-                                            <h2 class="text-lg font-medium text-gray-900 mb-3">
-                                                {{ __('Are you sure you want to update your order?') }}
-                                            </h2>
-
-                                            <table class="min-w-full bg-white">
-                                                <thead>
-                                                    <tr
-                                                        class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                                        <th class="py-3 px-6 text-left">Item Name</th>
-                                                        <th class="py-3 px-6 text-left">Price</th>
-                                                        <th class="py-3 px-6 text-left">Quantity</th>
-                                                        <th class="py-3 px-6 text-left">Subtotal</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="text-gray-600 text-sm font-light">
-                                                    <template x-for="(cartItem, index) in cart" :key="index">
-                                                        <div class="bg-gray-100 p-4 rounded-lg shadow mb-4">
-                                                            <div class="flex justify-between items-center">
-                                                                <span class="font-bold" x-text="cartItem.name"></span>
-                                                                <div class="flex items-center">
-                                                                    <input type="number"
-                                                                        x-model.number="cartItem.quantity"
-                                                                        min="1"
-                                                                        class="border border-gray-300 rounded-md w-16 text-center mr-2"
-                                                                        @input="updateTotalPrice()" />
-                                                                    <span class="font-semibold"
-                                                                        x-text="`$${(cartItem.price * cartItem.quantity).toFixed(2)}`"></span>
-                                                                    <x-danger-button type="button"
-                                                                        @click="removeFromCart(index)"
-                                                                        class="ml-2 p-1 text-xs">
-                                                                        ×
-                                                                    </x-danger-button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </template>
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <td colspan="3" class="py-3 px-6 text-right font-semibold">
-                                                            Total Price:</td>
-                                                        <td class="py-3 px-6 text-left"
-                                                            x-text="`$${totalPrice.toFixed(2)}`"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="3" class="py-3 px-6 text-right font-semibold">
-                                                            Delivery Price:</td>
-                                                        <td class="py-3 px-6 text-left">not selected yet</td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-
-                                            <input name="order_id" value="{{ $order->id }}" hidden>
-                                            <template x-for="(cartItem, index) in cart" :key="index">
-                                                <div>
-                                                    <input type="hidden" :name="'items[' + index + '][shop_item_id]'"
-                                                        x-model="cartItem.id">
-                                                    <input type="hidden" :name="'items[' + index + '][quantity]'"
-                                                        x-model="cartItem.quantity">
-                                                    <input type="hidden" :name="'items[' + index + '][price]'"
-                                                        x-model="cartItem.price">
+                                        x-on:click.prevent="$dispatch('open-modal', 'update-order-items')">{{ __('Update Your Order') }}</x-primary-button>
+                                        <x-modal name="update-order-items" focusable>
+                                            <form method="POST" action="{{ route('order-items.update', [$order->id, $shop->id]) }}" class="p-6"
+                                                x-data="{ extraFees: 0 }">
+                                                @method('PUT')
+                                                @csrf
+                                                <h2 class="text-lg font-medium text-gray-900 mb-3">
+                                                    {{ __('Are you sure you want to update your order?') }}
+                                                </h2>
+    
+                                                <table class="min-w-full bg-white">
+                                                    <thead>
+                                                        <tr
+                                                            class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                                            <th class="py-3 px-6 text-left">Item Name</th>
+                                                            <th class="py-3 px-6 text-left">Price</th>
+                                                            <th class="py-3 px-6 text-left">Quantity</th>
+                                                            <th class="py-3 px-6 text-left">Subtotal</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="text-gray-600 text-sm font-light">
+                                                        <template x-for="(cartItem, index) in cart" :key="index">
+                                                            <tr class="border-b hover:bg-gray-100">
+                                                                <td class="py-3 px-6 text-left" x-text="cartItem.name"></td>
+                                                                <td class="py-3 px-6 text-left"
+                                                                    x-text="`$${cartItem.price.toFixed(2)}`"></td>
+                                                                <td class="py-3 px-6 text-left">
+                                                                    <span x-text="cartItem.quantity"></span>
+                                                                </td>
+                                                                <td class="py-3 px-6 text-left"
+                                                                    x-text="`$${(cartItem.price * cartItem.quantity).toFixed(2)}`">
+                                                                </td>
+                                                            </tr>
+                                                        </template>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="3" class="py-3 px-6 text-right font-semibold">
+                                                                Total Price:</td>
+                                                            <td class="py-3 px-6 text-left"
+                                                                x-text="`$${totalPrice.toFixed(2)}`"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3" class="py-3 px-6 text-right font-semibold">
+                                                                Deliver Price:</td>
+                                                            <td class="py-3 px-6 text-left">not selected yet</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+    
+                                                <input name="order_id" value="{{ $order->id }}" hidden>
+                                                <template x-for="(cartItem, index) in cart" :key="index">
+                                                    <div>
+                                                        <input type="hidden" :name="'items[' + index + '][shop_item_id]'"
+                                                            x-model="cartItem.id">
+                                                        <input type="hidden" :name="'items[' + index + '][quantity]'"
+                                                            x-model="cartItem.quantity">
+                                                        <input type="hidden" :name="'items[' + index + '][price]'"
+                                                            x-model="cartItem.price">
+                                                    </div>
+                                                </template>
+    
+                                                <div class="mt-6 flex justify-end">
+                                                    <x-secondary-button x-on:click="$dispatch('close')">
+                                                        {{ __('Cancel') }}
+                                                    </x-secondary-button>
+    
+                                                    <x-primary-button type="submit" class="ml-3">
+                                                        {{ __('Update My Order') }}
+                                                    </x-primary-button>
                                                 </div>
-                                            </template>
-
-                                            <div class="mt-6 flex justify-end">
-                                                <x-secondary-button x-on:click="$dispatch('close')">
-                                                    {{ __('Cancel') }}
-                                                </x-secondary-button>
-
-                                                <x-primary-button type="submit" class="ml-3">
-                                                    {{ __('Update My Order') }}
-                                                </x-primary-button>
-                                            </div>
-                                        </form>
-                                    </x-modal>
+                                            </form>
+                                        </x-modal>
                                 </div>
                             </div>
                         </div>
@@ -209,8 +200,8 @@
             return {
                 cart: initialCart.map(item => ({
                     id: item.shop_item_id,
-                    name: `${item.name} [${item.size}]`,
-                    price: item.price,
+                    name: `${item.name} [${item.size}] $${item.price}`,
+                    price: parseFloat(item.price),
                     quantity: item.quantity
                 })),
                 selectedSizes: {},

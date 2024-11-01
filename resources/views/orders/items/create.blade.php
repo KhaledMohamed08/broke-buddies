@@ -105,8 +105,8 @@
                                 <span class="font-bold text-lg" x-text="`$${totalPrice.toFixed(2)}`"></span>
                                 <div class="ml-auto">
                                     <x-primary-button class="ml-2" x-data=""
-                                        x-on:click.prevent="$dispatch('open-modal', 'add-order-items')">{{ __('Create Your Order') }}</x-primary-button>
-                                    <x-modal name="add-order-items" focusable>
+                                        x-on:click.prevent="$dispatch('open-modal', 'store-order-items')">{{ __('Create Your Order') }}</x-primary-button>
+                                    <x-modal name="store-order-items" focusable>
                                         <form method="POST" action="{{ route('order-items.store', $order->id) }}" class="p-6"
                                             x-data="{ extraFees: 0 }">
                                             @csrf

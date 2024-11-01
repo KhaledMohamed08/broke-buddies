@@ -25,7 +25,6 @@ class UpdateShopItemRequest extends FormRequest
             'shop_id' => 'required',
             'name' => 'required',
             'price' => 'required',
-            'has_sizes' => 'nullable',
         ];
     }
 }

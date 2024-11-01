@@ -24,11 +24,11 @@ class DashBoardController extends Controller
             $orders = $orders->where('status', 1);
         }
         
-        return view('dashboard', compact([
+        return view('dashboard', compact(
             'orders',
             'authOrders',
             'joinedOrders',
             'shops',
-        ]));
+        ));
     }
 }

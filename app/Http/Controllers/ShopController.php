@@ -26,9 +26,9 @@ class ShopController extends Controller
     {
         $shopCategories = (new ShopCategoryService)->index();
 
-        return view('shops.create', compact([
+        return view('shops.create', compact(
             'shopCategories',
-        ]));
+        ));
     }
 
     /**

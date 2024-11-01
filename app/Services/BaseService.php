@@ -44,9 +44,4 @@ class BaseService
     {
         return $this->model->search($query)->get();
     }
-
-    // public static function search(Model $model, string $query)
-    // {
-    //     return $model->search($query)->get();
-    // }
 }

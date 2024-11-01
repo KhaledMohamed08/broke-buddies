@@ -15,12 +15,18 @@
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">
                         {{ __('Order Code: ' . $order->code) }}
                     </h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                        {{ __('Shop Name: ' . $order->shop->name) }}
+                    </h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                        {{ __('Shop Phone: ' . $order->shop->phone) }}
+                    </h3>
                     <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-                        <p class="text-sm text-gray-600">
+                        <p class="font-semibold text-sm text-gray-600">
                             {{ __('Order Users Count: ' . $order->orderUsers()->count()) }}
                         </p>
                         <p class="text-lg font-semibold text-gray-800 mt-2 md:mt-0">
-                            {{ __('Order Total Price: $' . number_format(100.99, 2)) }}
+                            {{ __('Order Total Price: $' . $order->orderTotalPrice()) }}
                         </p>
                     </div>
                 </div>
@@ -80,6 +86,24 @@
                             </div>
                         </form>
                     </x-modal>
+                    <x-primary-button x-data=""
+                        x-on:click.prevent="$dispatch('open-modal', 'add-fees-user-order{{ $order->id }}')">{{ __('Add Fees To Order') }}</x-primary-button>
+
+                    <x-modal name="add-fees-user-order{{ $order->id }}" focusable>
+                        <form method="POST" action="#" class="p-6">
+                            @csrf
+
+                            <div class="mt-6 flex justify-end">
+                                <x-secondary-button x-on:click="$dispatch('close')">
+                                    {{ __('Cancel') }}
+                                </x-secondary-button>
+
+                                <x-primary-button class="ms-3">
+                                    {{ __('Apply') }}
+                                </x-primary-button>
+                            </div>
+                        </form>
+                    </x-modal>
                     <x-danger-button class="ml-2" x-data=""
                         x-on:click.prevent="$dispatch('open-modal', 'delete-user-order{{ $order->id }}')">{{ __('Delete Order') }}</x-danger-button>
                     <x-modal name="delete-user-order{{ $order->id }}" focusable>
@@ -104,9 +128,6 @@
                             </div>
                         </form>
                     </x-modal>
-                    <x-primary-button>
-                        {{ __('Button 1') }}
-                    </x-primary-button>
                 </div>
             </div>
 

@@ -15,7 +15,7 @@
                         {{ __('All Orders') }}
                     </div>
                     <form action="{{ route('dashboard') }}" method="GET" class="flex items-center">
-                        <input type="text" name="search" placeholder="Search Orders By Code..."
+                        <input type="text" name="search" placeholder="Search Orders By Code..." value="{{ request()->search }}"
                             class="border border-gray-300 rounded-l-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 h-10" />
                         <x-primary-button type="submit" class="rounded-l-none h-10 px-4">
                             {{ __('Search') }}
@@ -108,7 +108,7 @@
                                         <td class="py-3 px-6 text-center">
                                             <x-primary-button>
                                                 <a
-                                                    href="{{ route('order-items.edit', [$order->id, auth()->id()]) }}">{{ __('Manage My Order') }}</a>
+                                                    href="{{ route('order-items.edit', [$order->id, $order->shop->id]) }}">{{ __('Manage My Order') }}</a>
                                             </x-primary-button>
                                         </td>
                                     @endif

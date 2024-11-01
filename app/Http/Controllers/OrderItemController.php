@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreOrderItemRequest;
 use App\Http\Requests\UpdateOrderItemRequest;
 use App\Services\OrderService;
+use App\Services\ShopService;
 
 class OrderItemController extends Controller
 {
@@ -39,7 +40,7 @@ class OrderItemController extends Controller
     {
         $this->orderItemService->store($request->all());
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with('success', 'Your Order Created Successfully');
     }
 
     /**
@@ -53,31 +54,27 @@ class OrderItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order $order, $x)
+    public function edit(Order $order, $shopId)
     {
-        $user = User::find(Auth::id());
-        $cartItems = $user->orderItemsForOrderId($order->id)->map(function ($item) {
-            $itemDetails = (new OrderService)->show($item->item_details_id);
+        $cartItems = $this->orderItemService->orderCartItems($order);
+        $shop = (new ShopService)->show($shopId);
 
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'size' => $itemDetails->size ?? 'N/A',
-                'price' => $itemDetails->price ?? 0,
-                'quantity' => $item->quantity,
-            ];
-        });
-
-        return view('orders.items.edit', compact('order', 'cartItems'));
+        return view('orders.items.edit', compact(
+            'order',
+            'shop',
+            'cartItems',
+        ));
     }
 
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrderItemRequest $request, OrderItem $orderItem)
+    public function update(UpdateOrderItemRequest $request, Order $order, $shopId)
     {
-        //
+        $this->orderItemService->update($order, $request->all());
+
+        return redirect()->route('dashboard')->with('success', 'Your Order Updatedf Successfully');
     }
 
     /**
