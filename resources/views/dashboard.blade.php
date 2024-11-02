@@ -35,6 +35,13 @@
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light">
+                            @if ($orders->isEmpty())
+                                <tr>
+        <td colspan="6" class="py-3 px-6 text-center text-gray-500">
+            No orders available.
+        </td>
+    </tr>
+                            @else    
                             @foreach ($orders as $order)
                                 <tr class="border-b hover:bg-gray-100">
                                     <td class="py-3 px-6 text-left">{{ $order->code }}</td>
@@ -64,6 +71,7 @@
                                     @endif
                                 </tr>
                             @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -224,7 +232,7 @@
                                 <label for="ends_at"
                                     class="block text-sm font-medium text-gray-700">{{ __('Ends at') }}</label>
                                 <input type="datetime-local" id="ends_at" name="ends_at"
-                                    value="{{ old('ends_at', $order->ends_at) }}"
+                                    value=""
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                     required>
                             </div>
@@ -233,7 +241,7 @@
                                 <label for="notes"
                                     class="block text-sm font-medium text-gray-700">{{ __('Notes') }}</label>
                                 <textarea id="notes" name="notes" rows="4"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('notes', $order->notes) }}</textarea>
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
                             </div>
 
                             <div x-data="{ fees: [] }" class="mb-4">
