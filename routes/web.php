@@ -29,6 +29,7 @@ Route::middleware('auth')->group( function () {
     // Order Routes
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::resource('/', OrderController::class)->parameter('', 'order');
+        Route::get('submit/{order}', [OrderController::class, 'submitOrder'])->name('submit');
     });
     // Order Items Routes
     Route::prefix('order-items/{order}')->name('order-items.')->group(function () {

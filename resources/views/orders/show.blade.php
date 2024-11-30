@@ -38,7 +38,7 @@
                             {{ __('Order Sub Total Price: $' . $order->orderItemsTotalPrice()) }}
                         </p>
                         <p class="text-lg font-semibold text-gray-800 mb-2">
-                            {{ __('Order Fees: $' .  $order->orderFeesTotalPrice() ) }}
+                            {{ __('Order Fees: $' . $order->orderFeesTotalPrice()) }}
                             <span class="ml-2 text-sm text-gray-600">
                                 @foreach ($order->fees as $fee)
                                     <span>{{ $fee->name }}: ${{ $fee->price }}</span>
@@ -60,89 +60,114 @@
             <div class="mb-6">
                 <h4 class="text-lg font-semibold text-gray-800 mb-4">{{ __('Actions') }}</h4>
                 <div class="flex space-x-4">
-                    <x-primary-button x-data=""
-                        x-on:click.prevent="$dispatch('open-modal', 'edit-user-order{{ $order->id }}')">{{ __('Edit Order') }}</x-primary-button>
+                    @if ($order->status != 2)
+                        <x-primary-button x-data=""
+                            x-on:click.prevent="$dispatch('open-modal', 'edit-user-order{{ $order->id }}')">{{ __('Edit Order') }}</x-primary-button>
+                        <x-modal name="edit-user-order{{ $order->id }}" focusable>
+                            <form method="POST" action="{{ route('orders.update', $order->id) }}" class="p-6">
+                                @csrf
+                                @method('PUT')
 
-                    <x-modal name="edit-user-order{{ $order->id }}" focusable>
-                        <form method="POST" action="{{ route('orders.update', $order->id) }}" class="p-6">
-                            @csrf
-                            @method('PUT')
+                                <div class="mb-4">
+                                    <label for="status"
+                                        class="block text-sm font-medium text-gray-700">{{ __('Status') }}</label>
+                                    <select id="status" name="status"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                        @foreach (App\Enums\OrderStatusEnum::cases() as $status)
+                                            <option value="{{ $status->value }}"
+                                                {{ $status->value == $order->status ? 'selected' : '' }}>
+                                                {{ $status->label() }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                            <div class="mb-4">
-                                <label for="status"
-                                    class="block text-sm font-medium text-gray-700">{{ __('Status') }}</label>
-                                <select id="status" name="status"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                    @foreach (App\Enums\OrderStatusEnum::cases() as $status)
-                                        <option value="{{ $status->value }}"
-                                            {{ $status->value == $order->status ? 'selected' : '' }}>
-                                            {{ $status->label() }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                <div class="mb-4">
+                                    <label for="ends_at"
+                                        class="block text-sm font-medium text-gray-700">{{ __('Ends at') }}</label>
+                                    <input type="datetime-local" id="ends_at" name="ends_at"
+                                        value="{{ old('ends_at', $order->ends_at) }}"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                        required>
+                                </div>
 
-                            <div class="mb-4">
-                                <label for="ends_at"
-                                    class="block text-sm font-medium text-gray-700">{{ __('Ends at') }}</label>
-                                <input type="datetime-local" id="ends_at" name="ends_at"
-                                    value="{{ old('ends_at', $order->ends_at) }}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                    required>
-                            </div>
+                                <div class="mb-4">
+                                    <label for="notes"
+                                        class="block text-sm font-medium text-gray-700">{{ __('Notes') }}</label>
+                                    <textarea id="notes" name="notes" rows="4"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('notes', $order->notes) }}</textarea>
+                                </div>
 
-                            <div class="mb-4">
-                                <label for="notes"
-                                    class="block text-sm font-medium text-gray-700">{{ __('Notes') }}</label>
-                                <textarea id="notes" name="notes" rows="4"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('notes', $order->notes) }}</textarea>
-                            </div>
-                            
-                            <div x-data="{ fees: [] }" class="mb-4">
-                                <span
-                                    class="block text-sm font-medium text-gray-700 mb-1">{{ __('Order Fees') }}</span>
+                                <div x-data="{ fees: [] }" class="mb-4">
+                                    <span
+                                        class="block text-sm font-medium text-gray-700 mb-1">{{ __('Order Fees') }}</span>
 
-                                <template x-for="(fee, index) in fees" :key="index">
-                                    <div class="mb-4 flex items-end space-x-4">
-                                        <div class="flex-1">
-                                            <label :for="'fee_name_' + index"
-                                                class="block text-sm font-medium text-gray-700">{{ __('Fees Name') }}</label>
-                                            <input type="text" :id="'fee_name_' + index"
-                                                :name="'fees[' + index + '][name]'" x-model="fee.name"
-                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                                required>
+                                    <template x-for="(fee, index) in fees" :key="index">
+                                        <div class="mb-4 flex items-end space-x-4">
+                                            <div class="flex-1">
+                                                <label :for="'fee_name_' + index"
+                                                    class="block text-sm font-medium text-gray-700">{{ __('Fees Name') }}</label>
+                                                <input type="text" :id="'fee_name_' + index"
+                                                    :name="'fees[' + index + '][name]'" x-model="fee.name"
+                                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                                    required>
+                                            </div>
+                                            <div class="flex-1">
+                                                <label :for="'fee_price_' + index"
+                                                    class="block text-sm font-medium text-gray-700">{{ __('Fees Price') }}</label>
+                                                <input type="number" :id="'fee_price_' + index"
+                                                    :name="'fees[' + index + '][price]'" x-model="fee.price"
+                                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                                    required>
+                                            </div>
+                                            <x-danger-button type="button" @click="fees.splice(index, 1)">
+                                                {{ __('x') }}
+                                            </x-danger-button>
                                         </div>
-                                        <div class="flex-1">
-                                            <label :for="'fee_price_' + index"
-                                                class="block text-sm font-medium text-gray-700">{{ __('Fees Price') }}</label>
-                                            <input type="number" :id="'fee_price_' + index"
-                                                :name="'fees[' + index + '][price]'" x-model="fee.price"
-                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                                required>
-                                        </div>
-                                        <x-danger-button type="button" @click="fees.splice(index, 1)">
-                                            {{ __('x') }}
-                                        </x-danger-button>
-                                    </div>
-                                </template>
+                                    </template>
 
-                                <x-primary-button type="button" @click="fees.push({ name: '', price: '' })">
-                                    {{ __('Add Fees') }}
-                                </x-primary-button>
-                            </div>
+                                    <x-primary-button type="button" @click="fees.push({ name: '', price: '' })">
+                                        {{ __('Add Fees') }}
+                                    </x-primary-button>
+                                </div>
 
-                            <div class="mt-6 flex justify-end">
-                                <x-secondary-button x-on:click="$dispatch('close')">
-                                    {{ __('Cancel') }}
-                                </x-secondary-button>
+                                <div class="mt-6 flex justify-end">
+                                    <x-secondary-button x-on:click="$dispatch('close')">
+                                        {{ __('Cancel') }}
+                                    </x-secondary-button>
 
-                                <x-primary-button class="ms-3">
-                                    {{ __('Apply') }}
-                                </x-primary-button>
-                            </div>
-                        </form>
-                    </x-modal>
+                                    <x-primary-button class="ms-3">
+                                        {{ __('Apply') }}
+                                    </x-primary-button>
+                                </div>
+                            </form>
+                        </x-modal>
+                        <x-primary-button class="ml-2" x-data=""
+                            x-on:click.prevent="$dispatch('open-modal', 'submit-user-order{{ $order->id }}')">{{ __('Submit Order') }}</x-primary-button>
+                        <x-modal name="submit-user-order{{ $order->id }}" focusable>
+                            <form method="GET" action="{{ route('orders.submit', $order->id) }}" class="p-6">
+                                @csrf
+                                <h2 class="text-lg font-medium text-gray-900">
+                                    {{ __('Are you sure you want to submit your order?') }}
+                                </h2>
 
+                                <div class="mt-6 flex justify-end">
+                                    <x-secondary-button x-on:click="$dispatch('close')">
+                                        {{ __('Cancel') }}
+                                    </x-secondary-button>
+
+                                    <x-primary-button class="ms-3">
+                                        {{ __('Submit') }}
+                                    </x-primary-button>
+                                </div>
+                            </form>
+                        </x-modal>
+                    @else
+                        <span
+                            class="inline-flex items-center px-2 py-1 text-sm font-semibold text-blue-800 bg-blue-200 rounded-full">
+                            {{ __('Order Submited') }}
+                        </span>
+                    @endif
                     <x-danger-button class="ml-2" x-data=""
                         x-on:click.prevent="$dispatch('open-modal', 'delete-user-order{{ $order->id }}')">{{ __('Delete Order') }}</x-danger-button>
                     <x-modal name="delete-user-order{{ $order->id }}" focusable>

@@ -24,13 +24,13 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
 
         $this->call([
-            ShopCategorySeeder::class,
-            ShopSeeder::class,
-            ItemCategorySeeder::class,
-            ShopItemSeeder::class,
-            ItemDetailsSeeder::class,
-            OrderSeeder::class,
-            OrderItemSeeder::class,
+            // ShopCategorySeeder::class,
+            // ShopSeeder::class,
+            // ItemCategorySeeder::class,
+            // ShopItemSeeder::class,
+            // ItemDetailsSeeder::class,
+            // OrderSeeder::class,
+            // OrderItemSeeder::class,
         ]);
     }
 }

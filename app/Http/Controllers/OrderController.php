@@ -31,9 +31,9 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrderRequest $request)
+    public function store(Request $request)
     {
-        $this->orderService->store($request->validated());
+        $this->orderService->store($request->all());
 
         return redirect()->back()->with('success', 'Order Created Successfully');
     }
@@ -82,5 +82,12 @@ class OrderController extends Controller
     public function ajaxSearch($search)
     {
         return response()->json($this->orderService->search($search));
+    }
+
+    public function submitOrder(Order $order)
+    {
+        $this->orderService->submitOrder($order);
+
+        return redirect()->back()->with('success', 'Order Submited Successfully');
     }
 }

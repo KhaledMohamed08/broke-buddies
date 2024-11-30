@@ -14,5 +14,10 @@ class ShopCategorySeeder extends Seeder
     public function run(): void
     {
         ShopCategory::factory()->count(3)->create();
+        ShopCategory::create(
+            [
+                'name' => 'Food',
+            ]
+        );
     }
 }

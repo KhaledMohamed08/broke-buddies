@@ -15,6 +15,7 @@ class ShopItem extends Model
     protected $fillable = [
         'shop_id',
         'name',
+        'item_category_id',
     ];
 
     public function shop()
@@ -27,7 +28,7 @@ class ShopItem extends Model
         return $this->belongsTo(ItemCategory::class);
     }
 
-    public function detalis()
+    public function details()
     {
         return $this->hasMany(ItemDetails::class);
     }

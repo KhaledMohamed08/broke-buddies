@@ -41,6 +41,14 @@ class OrderService extends BaseService
 
     // }
 
+    public function submitOrder($model)
+    {
+        $model->status = 2;
+        $model->save();
+
+        return $model;
+    }
+
     private function generateOrderCode()
     {
         do {

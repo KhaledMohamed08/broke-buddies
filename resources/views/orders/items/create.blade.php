@@ -49,7 +49,7 @@
                                                             class="w-full border border-gray-300 rounded-md p-2"
                                                             @change="updatePrice({{ $item->id }})">
                                                             <option value="">Select Size</option>
-                                                            @foreach ($item->detalis as $details)
+                                                            @foreach ($item->details as $details)
                                                                 <option value="{{ $details->price }}"
                                                                     data-name="{{ $item->name }}"
                                                                     data-size="{{ $details->size ?? 'One Size' }}">

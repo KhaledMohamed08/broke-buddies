@@ -49,7 +49,7 @@
                                                             class="w-full border border-gray-300 rounded-md p-2"
                                                             @change="updatePrice({{ $item->id }})">
                                                             <option value="">Select Size</option>
-                                                            @foreach ($item->detalis as $details)
+                                                            @foreach ($item->details as $details)
                                                                 <option value="{{ $details->price }}"
                                                                     data-name="{{ $item->name }}"
                                                                     data-size="{{ $details->size ?? 'One Size' }}">
@@ -232,9 +232,10 @@
                     price: parseFloat(item.price),
                     quantity: item.quantity
                 })),
+
+                totalPrice: initialCart.reduce((total, item) => total + (parseFloat(item.price) * item.quantity), 0),
                 selectedSizes: {},
                 prices: {},
-                totalPrice: 0,
                 showToast: false,
                 message: '',
 
@@ -253,17 +254,14 @@
                     const sizeName = selectedOption ? selectedOption.dataset.size : '';
                     const price = selectedOption ? parseFloat(selectedOption.value) : 0;
 
-                    // Validation: Check if size is selected
                     if (!selectedSize) {
                         this.showToast = true;
                         this.message = 'Please select a size before adding to the cart.';
                         return;
                     }
 
-                    // Create a unique identifier for the cart item using both name and size
                     const uniqueItemName = `${itemName} [${sizeName}] $${price}`;
 
-                    // Check if the item is already in the cart
                     const existingItem = this.cart.find(item => item.name === uniqueItemName);
                     if (existingItem) {
                         existingItem.quantity++;
@@ -276,10 +274,8 @@
                         });
                     }
 
-                    // Update total price
                     this.updateTotalPrice();
 
-                    // Log cart items
                     this.logCartItems();
                 },
 

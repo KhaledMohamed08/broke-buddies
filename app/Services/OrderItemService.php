@@ -48,11 +48,11 @@ class OrderItemService extends BaseService
 
         try {
             DB::transaction(function () use ($data, $order_id, $user_id) {
-                $existingItems = OrderItem::where('order_id', $order_id)->where('user_id', $user_id)->pluck('item_details_id')->toArray();
+                $existingItems = OrderItem::where('user_id', $user_id)->pluck('item_details_id')->toArray();
                 $newItemDetailsIds = [];
 
                 foreach ($data['items'] as $item) {
-                    $item_details_id = ItemDetails::where('price', $item['price'])->pluck('id')->first();
+                    $item_details_id = ItemDetails::where('shop_item_id', $item['shop_item_id'])->pluck('id')->first();
                     $item['item_details_id'] = $item_details_id;
                     $item['order_id'] = $order_id;
                     $item['user_id'] = $user_id;

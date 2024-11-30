@@ -36,9 +36,9 @@ class ShopController extends Controller
      */
     public function store(StoreShopRequest $request)
     {
-        $data = $request->all();
+        $this->shopService->store($request->all());
 
-        return $data;
+        return redirect()->route('dashboard')->with('success', 'Shop Created Successfully.');
     }
 
     /**
