@@ -64,10 +64,11 @@
                                         <div class="flex justify-between items-center">
                                             <span class="text-lg font-semibold text-gray-800"
                                                 x-text="category.name"></span>
-                                            <x-danger-button type="button"
+                                                <x-danger-button type="button"
                                                 @click="categories.splice(categoryIndex, 1)">
                                                 {{ __('Remove This Category') }}
                                             </x-danger-button>
+                                            
                                         </div>
                                         <div class="mt-4">
                                             <template x-for="(item, itemIndex) in category.items"

@@ -36,7 +36,12 @@ class ShopController extends Controller
      */
     public function store(StoreShopRequest $request)
     {
-        $this->shopService->store($request->all());
+        $data = $request->all();
+        if (!isset($data['categories'])) {
+            return redirect()->back()->with('fail', 'you do not have any category!');
+        }
+        
+        $this->shopService->store($data);
 
         return redirect()->route('dashboard')->with('success', 'Shop Created Successfully.');
     }
